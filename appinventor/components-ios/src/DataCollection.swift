@@ -9,6 +9,13 @@
 import Foundation
 
 @objc open class DataCollection: NSObject, DataSource {
+  weak var container: ComponentContainer?
+
+  public init(_ container: ComponentContainer) {
+    self.container = container
+    super.init()
+  }
+
   func getDataValue(_ key: AnyObject) -> AnyObject {
     return key
   }
@@ -71,5 +78,20 @@ import Foundation
   func removeDataSourceChangeListener(_ listener: DataSourceChangeListener) {
     guard let listenerObject = listener as? NSObject else { return }
     listeners.remove(listenerObject)
+  }
+
+  static func castToDouble(_ origList: YailList<AnyObject>) -> [Double] {
+    var result: [Double] = []
+    for item in origList {
+      if item is SCMSymbol {
+        continue
+      }
+      if let item = item as? NSNumber {
+        result.append(item.doubleValue)
+      } else if let item = item as? NSString, let value = Double(item as String) {
+        result.append(value)
+      }
+    }
+    return result
   }
 }

@@ -8,7 +8,9 @@ import DGCharts
 
 @objc open class ChartDataBase: DataCollection, Component, DataSourceChangeListener, ChartViewDelegate, ChartComponent {
   var _chartDataModel: ChartDataModel?
-  var _container: Chart
+  var _container: Chart {
+    return container as! Chart
+  }
   var _color: Int32 = AIComponentKit.Color.black.int32
   var _colors: [UIColor] = []
   var _label: String?
@@ -21,8 +23,7 @@ import DGCharts
   var lastDataSourceValue: AnyObject?
 
   @objc public init(_ chartContainer: Chart) {
-    self._container = chartContainer
-    super.init()
+    super.init(chartContainer)
     chartContainer.addDataComponent(self)
     initChartData()
     DataSourceKey("")
